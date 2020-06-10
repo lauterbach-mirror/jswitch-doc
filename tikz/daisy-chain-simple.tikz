@@ -1,0 +1,32 @@
+\input{../tikz/_jtag.tikz}
+
+\begin{tikzpicture}[]
+\jtag{1}{(0,0)}
+\jtag{2}{([xshift=3em]jtag1.east)}
+\jtag{3}{([xshift=3em]jtag2.east)}
+
+\path (jtag1_tck) to ++(0,-1.5em) coordinate (tck_inters) -- ++(0,-3.5em) coordinate (tck_in);
+\path (jtag1_tms) to ++(0,-2.5em) coordinate (tms_inters) -- (tck_in -| jtag1_tms) coordinate (tms_in);
+\coordinate (tdi_in) at ($(tms_in)!2!(tck_in)$);
+\coordinate (tdo_in) at ($(tck_in)!2!(tms_in)$);
+
+\node [below] at (tdi_in) {TDI};
+\node [below] at (tck_in) {TCK};
+\node [below] at (tms_in) {TMS};
+\node [below] at (tdo_in) {TDO};
+
+\draw [->,thick] (jtag1_tdo) -- (jtag2_tdi);
+\draw [->,thick] (jtag2_tdo) -- (jtag3_tdi);
+
+\draw [<-,thick] (jtag1_tdi) -| ([xshift=-1.5em]jtag1.south west) -- +(0,-3.5em) -| (tdi_in);
+\draw [->,thick] (jtag3_tdo) -|  ([xshift=1.5em]jtag3.south east) -- +(0,-3.5em) -| (tdo_in);
+\draw [->,thick] (tck_in) -- (jtag1_tck);
+\draw [->,thick] (tms_in) -- (jtag1_tms);
+\draw [fill] (tms_inters) circle (0.15em);
+\draw [fill] (tck_inters) circle (0.15em);
+\draw [->,thick] (tck_inters) -| (jtag2_tck);
+\draw [->,thick] (tck_inters) -| (jtag3_tck);
+\draw [->,thick] (tms_inters) -| (jtag2_tms);
+\draw [->,thick] (tms_inters) -| (jtag3_tms);
+
+\end{tikzpicture}

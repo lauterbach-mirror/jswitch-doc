@@ -1,0 +1,60 @@
+\input{../tikz/_jtag.tikz}
+\tikzstyle{demux}+=[minimum width=3em]
+\tikzstyle{mux}+=[minimum width=3em]
+\begin{tikzpicture}{}
+\node [draw] (control) {Controller};
+\node [demux,anchor=west] at ([xshift=1em]control.east) (demux1) {};
+\node [coordinate] at ($(demux1.north east)!0.5!(demux1.bottom right corner)$) (demux1_out1) {};
+\node [coordinate] at ($(demux1.south east)!0.5!(demux1.bottom left corner)$) (demux1_out2) {};
+\node [coordinate] at ($(demux1.west)$) (demux1_in) {};
+\node [mux] at ($(demux1)+(5em,0)$) (mux1) {};
+\node [coordinate] at ($(mux1.north west)!0.5!(mux1.bottom left corner)$) (mux1_in1) {};
+\node [coordinate] at ($(mux1.south west)!0.5!(mux1.bottom right corner)$) (mux1_in2) {};
+\node [coordinate] at ($(mux1.east)$) (mux1_out) {};
+\node [draw,] at ($(demux1_out1)!0.5!(mux1_in1)$) (tap1) {TAP};
+
+
+\node [demux,densely dotted,anchor=west] at ([xshift=1em]mux1_out) (demux2) {};
+\node [coordinate] at ($(demux2.north east)!0.5!(demux2.bottom right corner)$) (demux2_out1) {};
+\node [coordinate] at ($(demux2.south east)!0.5!(demux2.bottom left corner)$) (demux2_out2) {};
+\node [coordinate] at ($(demux2.west)$) (demux2_in) {};
+\node [mux,densely dotted,anchor=west] at ([xshift=1em]demux2.east) (mux2) {};
+\node [coordinate] at ($(mux2.north west)!0.5!(mux2.bottom left corner)$) (mux2_in1) {};
+\node [coordinate] at ($(mux2.south west)!0.5!(mux2.bottom right corner)$) (mux2_in2) {};
+\node [coordinate] at ($(mux2.east)$) (mux2_out) {};
+
+\node [demux,anchor=west] at ([xshift=1em]mux2_out) (demux3) {};
+\node [coordinate] at ($(demux3.north east)!0.5!(demux3.bottom right corner)$) (demux3_out1) {};
+\node [coordinate] at ($(demux3.south east)!0.5!(demux3.bottom left corner)$) (demux3_out2) {};
+\node [coordinate] at ($(demux3.west)$) (demux3_in) {};
+\node [mux] at ($(demux3)+(5em,0)$) (mux3) {};
+\node [coordinate] at ($(mux3.north west)!0.5!(mux3.bottom left corner)$) (mux3_in1) {};
+\node [coordinate] at ($(mux3.south west)!0.5!(mux3.bottom right corner)$) (mux3_in2) {};
+\node [coordinate] at ($(mux3.east)$) (mux3_out) {};
+\node [draw,] at ($(demux3_out1)!0.5!(mux3_in1)$) (tap3) {TAP};
+
+\draw [<-] (control.west) -- + (-1em,0) node [left] {\footnotesize{} TDI};
+\draw [->] (control) -- (demux1_in);
+
+\draw [->] ($(demux1_out2)$) -- ($(mux1_in2)$);
+\draw [->] (demux1_out1) -- (tap1);
+\draw [->] (tap1) -- (mux1_in1);
+
+\draw [->,dotted] (mux1_out) -- (demux2_in);
+
+\draw [->,dotted] (demux2_out2) -- (mux2_in2);
+
+\draw [->,dotted] (mux2_out) -- (demux3_in);
+
+\draw [->] (demux3_out1) -- (tap3);
+\draw [->] (tap3) -- (mux3_in1);
+\draw [->] (demux3_out2) -- (mux3_in2);
+
+\draw [->] (mux3_out) -- +(1em,0) node [right,align=left] {\footnotesize{}TDO};
+\draw [<-] (demux1.south) -- ($(demux1.south) + (0,-0.5em)$) node [below] (tmp1) {\footnotesize{}} -| ([xshift=0.3em]control.south);
+\draw [<-] (mux1.south) |- (tmp1.north);
+\draw [densely dotted] ([xshift=0.1em]control.south) |- ([yshift=-0.2em]tmp1.north) -- +(1em,0);
+\draw [densely dotted] ([xshift=-0.1em]control.south) |- ([yshift=-0.4em]tmp1.north) -- ++(0.5em,0);
+\draw [->] ([xshift=-0.3em]control.south) |- ([yshift=-0.6em]tmp1.north) -| coordinate (tmp1) (demux3.south);
+\draw [->] (tmp1) -| (mux3.south);
+\end{tikzpicture}

@@ -1,0 +1,17 @@
+\newcommand{\jtag}[2]
+{
+\node [jnode,anchor=west] (jtag#1) at #2 {};
+\node [right] at ([yshift=0.5em]jtag#1.west) (_jtag#1_tdi) {TDI};
+\node [left] at ([yshift=0.5em]jtag#1.east) (_jtag#1_tdo) {TDO};
+\node [above] at ([xshift=-1.5em]jtag#1.south) (_jtag#1_tck)  {TCK};
+\node [above] at ([xshift=1.5em]jtag#1.south) (_jtag#1_tms) {TMS};
+\coordinate (jtag#1_tdi) at (_jtag#1_tdi.west);
+\coordinate (jtag#1_tdo) at (_jtag#1_tdo.east);
+\coordinate (jtag#1_tck) at (_jtag#1_tck.south);
+\coordinate (jtag#1_tms) at (_jtag#1_tms.south);
+}
+\tikzstyle{jnode}=[draw,rounded corners,minimum height=3.5em,minimum width=8em]
+\tikzstyle{buffer}=[draw=black,fill=white,regular polygon,regular polygon sides=3,rotate=30,inner sep=0,minimum height=1.5em]
+
+\tikzstyle{demux} = [trapezium,draw,shape border rotate=90,trapezium stretches body]
+\tikzstyle{mux} = [trapezium,draw,shape border rotate=270,trapezium stretches body]

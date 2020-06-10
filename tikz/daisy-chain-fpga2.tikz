@@ -1,0 +1,53 @@
+\input{../tikz/_jtag.tikz}
+
+\begin{tikzpicture}[]
+\jtag{1}{(0,0)}
+\jtag{2}{([xshift=3em]jtag1.east)}
+\jtag{3}{([xshift=3em]jtag2.east)}
+
+\draw ($(jtag1.south west)+(-1.5em,-1.5em)$) coordinate (fpga_north_west) -- ($(jtag3.south east)+(1.5em,-1.5em)$) coordinate (fpga_north_east);
+\draw (fpga_north_west) -- +(0,-4em) coordinate (fpga_south_west);
+\draw (fpga_north_east) -- (fpga_north_east |- fpga_south_west) coordinate (fpga_south_east); 
+\draw (fpga_south_west) -- coordinate (fpga_south) (fpga_south_east);
+\node [anchor=south west] at (fpga_south_west) {PCB TAP};
+\node [anchor=south east] at (fpga_south_east) {JTAG Switcher FPGA};
+
+\coordinate (fpga_tck_in) at ([xshift=-1.3em]fpga_south);
+\coordinate (fpga_tms_in) at ($(fpga_tck_in)!2!(fpga_south)$);
+\coordinate (fpga_tdi_in) at ($(fpga_tms_in)!2!(fpga_tck_in)$);
+\coordinate (fpga_tdo_out) at ($(fpga_tck_in)!2!(fpga_tms_in)$);
+
+\draw ([xshift=-0.5em]fpga_tdi_in) coordinate (iobank3_vccio) -- ++(0,1.5em) -| ([xshift=0.5em]fpga_tdo_out) node [yshift=0.3em,anchor=base east] {\tiny{IO-Bank}};
+
+\draw [<-,thick] (fpga_tck_in) -- +(0,-1.2em) coordinate (tck_in) node [below] {TCK};
+\draw [<-,thick] (fpga_tms_in) -- (fpga_tms_in |- tck_in) node [below] {TMS};
+\draw [<-,thick] (fpga_tdi_in) -- (fpga_tdi_in |- tck_in) node [below] {TDI};
+\draw [->,thick] (fpga_tdo_out) -- (fpga_tdo_out |- tck_in) node [below] {TDO};
+
+\draw [thick] (jtag1_tdo) -| ([xshift=0.5em]jtag1_tdo |- fpga_north_west) coordinate (iobank1_tdo);
+\draw [thick] (jtag1_tdi) -| ([xshift=-0.5em]jtag1_tdi |- fpga_north_west) coordinate (iobank1_tdi);
+\draw [thick] (jtag1_tms) -- (jtag1_tms |- fpga_north_west);
+\draw [thick] (jtag1_tck) -- (jtag1_tck |- fpga_north_west);
+\draw ([xshift=-0.5em]iobank1_tdi) -- ++(0,-1.5em) coordinate (iobank1_vccio) -| node [yshift=0.3em,anchor=base east] {\tiny{IO-Bank}} ([xshift=0.5em]iobank1_tdo);
+
+\draw [thick] (jtag2_tdo) -| ([xshift=0.5em]jtag2_tdo |- fpga_north_west) coordinate (iobank2_tdo);
+\draw [thick] (jtag2_tdi) -| ([xshift=-0.5em]jtag2_tdi |- fpga_north_west) coordinate (iobank2_tdi);
+\draw [thick] (jtag2_tms) -- (jtag2_tms |- fpga_north_west);
+\draw [thick] (jtag2_tck) -- (jtag2_tck |- fpga_north_west);
+\draw ([xshift=-0.5em]iobank2_tdi) -- ++(0,-1.5em) coordinate (iobank2_vccio) -| node [yshift=0.3em,anchor=base east] {\tiny{IO-Bank}} ([xshift=0.5em]iobank2_tdo);
+
+\draw [thick] (jtag3_tdo) -| ([xshift=0.5em]jtag3_tdo |- fpga_north_west) coordinate (iobank3_tdo);
+\draw [thick] (jtag3_tdi) -| ([xshift=-0.5em]jtag3_tdi |- fpga_north_west) coordinate (iobank3_tdi);
+\draw [thick] (jtag3_tms) -- (jtag3_tms |- fpga_north_west);
+\draw [thick] (jtag3_tck) -- (jtag3_tck |- fpga_north_west);
+\draw ([xshift=-0.5em]iobank3_tdi) -- ++(0,-1.5em) coordinate (iobank3_vccio) -| node [yshift=0.3em,anchor=base east] {\tiny{IO-Bank}} ([xshift=0.5em]iobank3_tdo);
+
+\node [fit=(jtag1),label={\tiny{}IC 1 - $VREF_1$}] {};
+\node [fit=(jtag2),label={\tiny{}IC 2 - $VREF_2$}] {};
+\node [fit=(jtag3),label={\tiny{}IC 3 - $VREF_3$}] {};
+
+\node [yshift=0.3em,anchor=base west] at (iobank1_vccio) {\tiny{}$VCC_{IO}=VREF_1$};
+\node [yshift=0.3em,anchor=base west] at (iobank2_vccio) {\tiny{}$VCC_{IO}=VREF_2$};
+\node [yshift=0.3em,anchor=base west] at (iobank3_vccio) {\tiny{}$VCC_{IO}=VREF_3$};
+
+\end{tikzpicture}

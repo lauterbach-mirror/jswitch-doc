@@ -1,0 +1,4 @@
+\begin{tikzpicture}
+\path (0,0) [fill,rounded corners=0.15em,black!70] -- (1em,0em) -- (1.4em,2.1em) -- (0em,0em) -- (0.5em,0em);
+\path (1.5em,0) [fill,rounded corners=0.15em,black!40] -- (2.8em,0) -- (1.5em,2.1em) -- (1.15em,0em) -- +(0.5em,0);
+\end{tikzpicture}

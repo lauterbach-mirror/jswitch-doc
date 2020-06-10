@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+\node {\input{../tikz/jswitch_principle2.tikz}};
+
+\node [anchor=south,draw,thick,ltb_blue,rounded corners,label={[ltb_blue]\footnotesize{}Session1},yshift=1.0em] at (control.north |- demux1.north) (session1) {\input{../tikz/ltb_flag.tikz}};
+\node [anchor=west,draw,thick,ltb_green,rounded corners,label={[ltb_green]\footnotesize{}Session2}] at ([xshift=0.25em]session1.east) (session2) {\input{../tikz/ltb_flag.tikz}};
+\node [anchor=west,draw,thick,ltb_orange,rounded corners,label={[ltb_orange]\footnotesize{}Session3}] at ([xshift=0.25em]session2.east) (session3) {\input{../tikz/ltb_flag.tikz}};
+\node [draw,thick,ltb_blue,inner sep=0,fit=(tap1)] {};
+\node [draw,thick,ltb_green,inner sep=0,fit=(tap2)] {};
+\node [draw,thick,ltb_orange,inner sep=0,fit=(tap3)] {};
+\draw [ltb_blue,->] (session1.south) to[out=-10,in=180] (tap1.west);
+\draw [ltb_green,->] (session2.south) to[out=0,in=180] (tap2.west);
+\draw [ltb_orange,->] (session3.south) to[out=-45,in=10] (tap3.east);
+\node [draw,thick,ltb_red,inner sep=0,fit=(control)] {};
+\draw [ltb_red,->] (session1.south) -- +(0,-0.4em) coordinate (intersection) -- (session1.south |- control.north);
+\draw [ltb_red] (intersection) -| (session2.south);
+\draw [ltb_red] (intersection) -| (session3.south);
+\end{tikzpicture}

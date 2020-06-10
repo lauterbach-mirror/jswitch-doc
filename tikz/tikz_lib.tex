@@ -1,0 +1,31 @@
+\usetikzlibrary{shapes,arrows,calc,patterns,backgrounds,fit}
+
+\tikzstyle{block} = [draw, text=white!90!gray, fill=blue!20!gray, rectangle, rounded corners, minimum height=2.6em, minimum width=5.5em]
+\tikzstyle{sum} = [draw, fill=blue!20, circle, node distance=1cm]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+\tikzstyle{bus} = [thick,double distance=0.1em,>=latex']
+\tikzstyle{secnsecreg}=[minimum width=13em,minimum height=2em]
+\tikzstyle{secure}=[secnsecreg,fill=blue!50!gray,fill opacity=0.8]
+\tikzstyle{nonsecure}=[secnsecreg,fill opacity=0.6,fill=orange]
+\tikzstyle{sg}=[secnsecreg,pattern=crosshatch,pattern color=blue!50!gray,fill opacity=0.8]
+
+\colorlet{ltb_green}{green!70!black}
+\colorlet{ltb_blue}{blue!75!black}
+\colorlet{ltb_orange}{orange!80}
+\colorlet{ltb_yellow}{yellow!65!orange}
+\colorlet{ltb_red}{red!80!black}
+\colorlet{ltb_highlight_red}{ltb_red}
+\colorlet{ltb_highlight_orange}{ltb_orange}
+\tikzstyle{ltb_blue_trans}=[fill=blue!25,fill opacity=0.5]
+\tikzstyle{ltb_orange_trans}=[fill opacity=0.5,fill=orange]
+
+\makeatletter
+\@ifclassloaded{beamer}{
+    \newcommand{\ltbbeamer}[0]{1=1}
+}{
+    \newcommand{\ltbbeamer}[0]{1=0}
+}
+\makeatother
+\newcommand{\mytikzrefnode}[1]{\tikz[remember picture,baseline=-.5ex] \coordinate (#1) {};}

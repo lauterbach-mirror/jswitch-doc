@@ -1,0 +1,21 @@
+\input{../tikz/_jtag.tikz}
+\begin{tikzpicture}{node distance=4em}
+\node [demux,minimum width=3em] (demux) {};
+\node [coordinate] at ($(demux.north east)!0.5!(demux.bottom right corner)$) (demux_out1) {};
+\node [coordinate] at ($(demux.south east)!0.5!(demux.bottom left corner)$) (demux_out2) {};
+\node [coordinate] at ($(demux.west)$) (demux_in) {};
+
+\node [mux,,minimum width=3em,right of=demux,node distance=9em] (mux) {};
+\node [coordinate] at ($(mux.north west)!0.5!(mux.bottom left corner)$) (mux_in1) {};
+\node [coordinate] at ($(mux.south west)!0.5!(mux.bottom right corner)$) (mux_in2) {};
+\node [coordinate] at ($(mux.east)$) (mux_out) {};
+\node [draw] at ($(demux_out1)!0.5!(mux_in1)$) (jswitch) {JTAG Switcher};
+
+\draw ($(demux_out2)$) -- ($(mux_in2)$);
+\draw (demux_out1) -- (jswitch);
+\draw (jswitch) -- (mux_in1);
+\draw [->] ($(demux_in) + (-1em,0)$) node [left] {\footnotesize TDI} -- (demux_in);
+\draw [->] (mux_out) -- ($(mux_out) + (1em,0)$) node [right] {\footnotesize TDO to Slaves};
+\draw [->] ($(demux.south) + (0,-0.5em)$) node [below] {\footnotesize STEALTH} -- (demux.south);
+\draw [->] ($(mux.south) + (0,-0.5em)$) node [below] {\footnotesize STEALTH} -- (mux.south);
+\end{tikzpicture}

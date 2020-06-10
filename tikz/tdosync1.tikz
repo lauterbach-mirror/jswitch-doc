@@ -1,0 +1,84 @@
+\newcommand{\jtagsyncnode}[4]{
+\node [anchor=base west,draw,align=center,minimum height=3em,minimum width=2em,#4] (#2) at (#1) {#3};
+\coordinate (#2_tck) at ($(#2.north west)!0.75!(#2.south west)$);
+\coordinate (#2_tdi) at ($(#2.north west)!0.25!(#2.south west)$);
+\path (#2_tdi) -| coordinate (#2_tdo) (#2.east);
+\draw (#2_tck) -- +(0,0.5em) -- +(0.7em,0) -- +(0,-0.5em) -- (#2_tck);
+}
+\newcommand{\jtagsync}[2]{\jtagsyncnode{#1}{reg#2}{S\\D}{text=white}}
+\newcommand{\jtagsimple}[3]{
+\node [anchor=base west,draw,align=center,minimum height=3em,minimum width=2em] at (#1) (#2) {#3};
+\coordinate (#2_tdi) at ($(#2.north west)!0.25!(#2.south west)$);
+\path (#2_tdi) -| coordinate (#2_tdo) (#2.east);
+}
+\newcommand{\tdosyncmodel}[2]
+{
+\jtagsyncnode{#1}{probe_in}{PROBE\\TDI}{}
+\jtagsyncnode{[xshift=2em]probe_in.base east}{fpga1}{JTAG\\Switcher}{inner xsep=1.0em}
+\jtagsyncnode{[xshift=2em]fpga1.base east}{dut1}{DUT\\TAP}{inner xsep=1.0em}
+\ifthenelse{#2}
+{
+  \jtagsync{[xshift=2em]dut1.base east}{2}
+  \jtagsimple{[xshift=1em]reg2.base east}{fpga2}{JTAG\\Switcher};
+}
+{
+  \jtagsimple{[xshift=5em]dut1.base east}{fpga2}{JTAG\\Switcher};
+}
+\jtagsyncnode{[xshift=2em]fpga2.base east}{dut2}{DUT\\TAP}{inner xsep=1.0em};
+\ifthenelse{#2}
+{
+  \jtagsync{[xshift=2em]dut2.base east}{3}
+  \jtagsimple{[xshift=1em]reg3.base east}{fpga3}{JTAG\\Switcher};
+}
+{
+  \jtagsimple{[xshift=5em]dut2.base east}{fpga3}{JTAG\\Switcher};
+}
+\jtagsyncnode{[xshift=2em]fpga3.base east}{probe_out}{PROBE\\TDO}{};
+\draw [thick,->] (probe_in_tdo) -- node [above] {\footnotesize{}TDI} (fpga1_tdi);
+\draw [thick,->] (fpga1_tdo) -- (dut1_tdi);
+\ifthenelse{#2}{
+  \draw [thick,->] (dut1_tdo) -- (reg2_tdi);
+  \draw [thick,->] (reg2_tdo) -- (fpga2_tdi);
+}{
+  \draw [thick,->] (dut1_tdo) -- (fpga2_tdi);
+}
+\draw [thick,->] (fpga2_tdo) -- (dut2_tdi);
+\ifthenelse{#2}{
+  \draw [thick,->] (dut2_tdo) -- (reg3_tdi);
+  \draw [thick,->] (reg3_tdo) -- (fpga3_tdi);
+}{
+  \draw [thick,->] (dut2_tdo) -- (fpga3_tdi);
+}
+\draw [thick,->] (fpga3_tdo) -- node [above] {\footnotesize{}TDO} (probe_out_tdi);
+\draw [thick] (probe_in_tck) -| ++(-0.5em,-2em) coordinate (tck_inters)-- + (-1em,0) node [left] {TCK};
+\draw [thick] (fpga1_tck) -- ++(-0.5em,0) |- (tck_inters);
+\draw [thick] (dut1_tck) -- ++(-0.5em,0) |- (tck_inters);
+\ifthenelse{#2}{
+  \draw [thick] (reg2_tck) -- ++(-0.5em,0) |- (tck_inters);
+}{}
+\draw [thick] (dut2_tck) -- ++(-0.5em,0) |- (tck_inters);
+\ifthenelse{#2}{
+  \draw [thick] (reg3_tck) -- ++(-0.5em,0) |- (tck_inters);
+}{}
+\draw [thick] (probe_out_tck) -- ++(-0.5em,0) |- (tck_inters);
+}
+
+\begin{tikzpicture}[]
+\tdosyncmodel{0,0}{1=0}
+\draw [shorten >=-0.3em] (dut1.north east) -- +(0,2em) coordinate (t1);
+\draw [shorten >=-0.3em] (dut2.north west) -- +(0,2em) coordinate (t2);
+\draw [<->] (t1) -- node [above,] {\footnotesize{}$t_{delay,dut,dut}$} (t2);
+
+\draw [shorten >=-0.3em] (dut2.north east) -- +(0,2em) coordinate (t1);
+\draw [shorten >=-0.3em] (probe_out.north west) -- +(0,2em) coordinate (t2);
+\draw [<->] (t1) -- node [above,] {\footnotesize{}$t_{delay,dut,probe}$} (t2);
+
+\onslide<2->{
+\tdosyncmodel{0,-6em}{1=1}
+
+\node [fit=(reg2)(fpga2),draw,rounded corners,ltb_blue,thick] {};
+\node [fit=(reg3)(fpga3),draw,rounded corners,ltb_blue,thick] {};
+}
+
+
+\end{tikzpicture}
