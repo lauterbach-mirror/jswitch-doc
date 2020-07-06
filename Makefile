@@ -25,8 +25,9 @@ jswitch_beamer.pdf: src/jswitch_beamer.tex out/gitdate.tex $(ALLPNGS) out/jtag_l
 	mv out/jswitch_beamer.pdf $(MKFILEPATH)/jswitch_beamer_current.pdf
 
 .PHONY: out/gitdate.tex
-out/gitdate.tex: out
-	echo -e "\\\newcommand{\gitdate}{$(shell git show -s --format=%cd --date=format:"%d %B %Y" HEAD)}" > out/gitdate.tex
+out/gitdate.tex: src/gitdate.tex out
+	$(eval TODAY_NICE := $(shell git show -s --format=%cd --date=format:"%d %B %Y" HEAD))
+	sed 's/__GITDATE__/$(TODAY_NICE)/' $(PWD)/$< > $(PWD)/$@
 
 out/jtag_logic.png: png/jtag_logic.png | out
 	cp $< $@
