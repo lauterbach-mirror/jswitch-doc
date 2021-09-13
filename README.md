@@ -49,16 +49,16 @@ in the documentation you need to get xfig running.
 
 I had success under windows by using the cygwin64 package **xorg-server** as X11 Server:
 
-Install the Cygwin64 packages
+1. Install the Cygwin64 packages
 - xorg-server
 - xinit
 
-Start Cygwin64 X Server with
+2. Start Cygwin64 X Server with
 ```bash
 setsid XWin -multiwindow 1>xwin.log 2>&1 &
 ```
 
-Check with "ps" that X Server is running:
+3. Check with `ps` that X Server is running:
 ```bash
 $ ps
    PID    PPID    PGID     WINPID   TTY         UID    STIME COMMAND
@@ -68,7 +68,7 @@ $ ps
    588       1     588       3160  ?        1049722 13:07:05 /usr/bin/mintty
 ```
 
-Start xfig with
+4. Start xfig with
 ```bash
 DISPLAY=':0.0' setsid xfig 1>/dev/null 2>&1 &
 ```
